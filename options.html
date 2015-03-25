@@ -1,0 +1,36 @@
+<html>
+<head>
+  <title>Amazon Price Match Options</title>
+  <style>
+    body: { padding: 10px; }
+  </style>
+  <script src="options.js"></script>
+</head>
+<body>
+  Monitor products for 
+  <select id="days">
+   <option value="7">One Week</option>
+   <option value="14">Two Weeks</option>
+   <option value="30" selected>One Month</option>
+   <option value="60">Two Months</option>
+   <option value="90">One Quarter</option>
+  </select>
+  Minimal price change:
+  <select id="min_price_change">
+   <option value="1">One Dollar</option>
+   <option value="2">Two Dollar</option>
+   <option value="5" selected>Five Dollar</option>
+   <option value="10">Ten Dollar</option>
+   <option value="20">Twenty Dollar</option>
+  </select>
+  Refresh interval:
+  <select id="refresh_interval">
+    <option value="60">One Hour</option>
+    <option value="120">Two Hour</option>
+    <option value="360">Six Hour</option>
+    <option value="720">Half a Day</option>
+    <option value="1440">One Day</option>
+  </select>
+  <button id="save">Save</button>
+</body>
+</html>

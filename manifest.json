@@ -1,0 +1,36 @@
+{
+  "manifest_version": 2,
+  "name": "Amazon Price Match",
+  "description": "Monitor prices for products you buy on Amazon.",
+  "version": "1.0",
+  "permissions": [
+    "activeTab",
+    "alarms",
+	"notifications",
+    "storage",
+	"tabs",
+    "webNavigation",
+    "http://www.amazon.com/"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "content_scripts": [
+    {"matches": ["https://www.amazon.com/gp/buy/spc/handlers/display.html*"],
+	 "js": ["order.js"],
+	 "run_at": "document_end"
+	},
+	{"matches": ["*://www.amazon.com/gp/product/*"],
+	 "js": ["product.js"],
+	 "run_at": "document_end"
+	}
+  ],
+  "background": {
+    "scripts": ["events.js"],
+	"persistent": false 
+  },
+  "browser_action": {
+    "default_icon": "icon.png",
+	"default_title": "Amazon Price Match",
+    "default_popup": "popup.html"
+  },
+  "options_page" : "options.html"
+}

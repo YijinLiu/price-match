@@ -1,0 +1,116 @@
+<html ng-app="apmApp" >
+<head>
+  <title>Amazon Price Match Products</title>
+  <style>
+    body {
+	  min-width: 400px;
+	}
+	table {
+	  font-size: small;
+	}
+    .raised {
+	  color: green;
+	}
+	.dropped {
+	  color: red;
+	}
+	span.btn {
+	  color: #39c;
+	  font-weight: bold;
+	  cursor: pointer;
+	  float: right;
+	}
+	a {
+	  color: #39c;
+	}
+	.pm {
+	  float: right;
+	  -webkit-transform: rotate(360deg);
+      -webkit-transition: all 1s ease-out;
+	}
+	.price {
+	  font-weight: bold;
+	}
+	@-webkit-keyframes blink {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+	.buy-price {
+      -webkit-animation-name: blink;
+	  -webkit-animation-duration: 400ms;
+      -webkit-animation-iteration-count: infinite;
+      -webkit-animation-direction: alternate;
+	}
+	.tm {
+	  color: #999;
+	}
+	.monitor {
+	  border: 1px groove blue;
+	}
+  </style>
+  <script src="angular.min.js"></script>
+  <script src="angular-route.min.js"></script>
+  <script src="popup.js"></script>
+</head>
+<body ng-controller="ProductsCtrl">
+<div ng-show="products.length == 0">No Products!</div>
+<div ng-show="products.length > 0">
+Search: <input ng-model="query" size=30/>
+<span class="btn" title="{{monitorProduct.longName}}"
+      ng-show="monitorProduct" ng-click="monitor(monitorProduct)">Monitor Product</span>
+</div>
+<table>
+<tr ng-repeat="product in products | filter:query" class="a-row">
+  <td valign="top">
+    <a ng-href="http://www.amazon.com/gp/product/{{product.productId}}"
+       target=_blank>
+      <img border=0 align="middle"
+           ng-src="{{product.image}}"
+		   alt="{{product.shortName}}"/>
+    </a>
+  </td>
+  <td  ng-class="{ monitor : product.quantity == 0 }" >
+    <div class="name">
+	  <a ng-href="http://www.amazon.com/gp/product/{{product.productId}}"
+         target=_blank>{{showProductName(product.longName)}}</a>
+	  ({{product.quantity > 0 ? 'quantity: ' + product.quantity : 'monitor'}})
+	</div>
+    <div>
+	  {{product.quantity > 0 ? 'Buy' : 'Expected'}} price:
+	  <span class="price" ng-class="{'buy-price':product.quantity == 0&&product.currentPrice<=product.expectedPrice}">
+	    ${{product.quantity > 0 ? product.price : product.expectedPrice}}
+	  </span>
+	  <span class="tm" ng-show="product.quantity == 0">
+	    (original ${{product.price}} @{{formatTimestamp(product.buyTs)}})
+	  </span>
+	  <span class="tm" ng-show="product.quantity > 0">
+	    ({{formatTimestamp(product.buyTs)}})
+	  </span>
+	  <span class="btn" ng-click="remove(product.productId)">Remove</span>
+    </div>
+    <div>
+      Current price:
+      <span class="price" ng-show="product.currentPrice"
+            ng-class="{ raised : isRaised(product),
+	                    dropped : isDropped(product)}">
+        ${{product.currentPrice}}
+      </span>
+      <span class="price" ng-show="!product.currentPrice">
+        ${{product.price}}
+      </span>
+	  <span class="pm">
+	    <a target=_blank
+  	       ng-show="product.quantity > 0 && isDropped(product, options.minPriceChange)"
+     	   href="https://www.amazon.com/gp/help/customer/contact-us"
+	    >Price Match!</a>
+	  </span>
+    </div>
+  </td>
+</tr>
+</table>
+</body>
+</html>
